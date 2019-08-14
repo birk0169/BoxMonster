@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <!-- Title and Description -->
+        <title>Box Monster</title>
+        <meta name="description" content="En Css animation opgave">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="css/styles.css">
+        <!--Goolge Fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Lexend+Tera|Open+Sans&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="dark">
+                <h1 class="centered">BOX MONSTER</h1>
+                <div class="grid">
+                    <!--Player Character-->
+                    <div class="box box-base item-3-3"></div>
+                    <!--Apple-->
+                    <div class="apple"></div>
+                    <!--obstacles-->
+                    <div class="skull-1 skull item-1-1"></div>
+                </div>
+                <h3 class="centered">Turn</h3>
+                <h2 id="turn-count">0</h2>
+                <h3 class="centered">Score</h3>
+                <h2 class="centered score">0</h2>
+                <button id="reset-button" class="centered" onclick="reset()">Reset</button>
+        </div>
+        
+        <!-- JAVASCRIPT -->
+        <!-- Custom js -->
+        <script src="js/myScript.js"></script>
+    </body>
+</html>
