@@ -29,11 +29,26 @@ var appleY = 1;
 
 var apple = document.querySelector(".apple");
 
-//SKULL
-var skull = document.querySelector("skull");
-
 //Current location class of the apple
 var appleLocationClass = "hidden";
+
+//SKULL
+//cordincates of the skull
+var skullOneX = 0;
+var skullOneY = 0;
+
+var skullTwoX = 0;
+var skullTwoY = 0;
+
+var skullThreeX = 0;
+var skullThreeY = 0;
+
+var skullOne = document.querySelector(".skull");
+var skullTwo = document.querySelector(".skull");
+var skullThree = document.querySelector(".skull");
+
+//Current location of the skull
+var skullLocationClass = "hidden";
 
 //Wait
 var wait = 250;
@@ -43,6 +58,7 @@ document.onkeydown = checkKey;
 
 //Spawn the first apple
 spawnApple();
+spawnSkull();
 
 function checkKey(e){
     e = e || window.event;
@@ -220,6 +236,10 @@ function reset(){
 
     document.getElementById("turn-count").innerHTML = turnCount;
 
+    skullOne.classList.remove(skullLocationClass);
+    skullLocationClass = "hidden";
+    skullOne.classList.add(skullLocationClass);
+
     spawnApple();
 }
 
@@ -254,7 +274,12 @@ function jumpToggle(){
 //Check Monster
 function monsterCheck(){
     checkForApple();
+    
     skullGrowth();
+
+    if((boxLocationX == skullOneX && boxLocationY == skullOneY) && hasClass(skullOne, "skull-3")){
+        reset();
+    }
     
 }
 
@@ -264,7 +289,7 @@ function spawnApple(){
     while(true){
         appleX = Math.floor(Math.random() * 5) + 1;
         appleY = Math.floor(Math.random() * 5) + 1;
-        if(appleX != boxLocationX && appleY != boxLocationY){
+        if((appleX != boxLocationX && appleY != boxLocationY) && !skullsAtLocation(appleX, appleY)){
             apple.classList.remove(appleLocationClass);
             appleLocationClass = "item-" + appleX + "-" + appleY;
             apple.classList.add(appleLocationClass);
@@ -287,28 +312,51 @@ function checkForApple(){
 //Sound for apple
 
 //Skull logic
+function spawnSkull(){
+    while(true){
+        skullOneX = Math.floor(Math.random() * 5) + 1;
+        skullOneY = Math.floor(Math.random() * 5) + 1;
+        if(skullOneX != appleX && skullOneY != appleY){
+            skullOne.classList.remove(skullLocationClass);
+            skullLocationClass = "item-" + skullOneX + "-" + skullOneY;
+            skullOne.classList.add(skullLocationClass);
+            break;
+        }
+    }
+}
+
 function skullGrowth(){
 
 
-    skull = document.querySelector(".skull");
+    skullOne = document.querySelector(".skull");
     
-    if(skull.classList == null){
+    if(skullOne.classList == null){
 
-    } else if(hasClass(skull, "skull-1")){
-        skull.classList.remove("skull-1");
-        skull.classList.add("skull-2");
-    } else if(hasClass(skull, "skull-2")){
-        skull.classList.remove("skull-2");
-        skull.classList.add("skull-3");
-    } else if(hasClass(skull, "skull-3")){
-        skull.classList.remove("skull-3");
-        skull.classList.add("skull-1");
+    } else if(hasClass(skullOne, "skull-1")){
+        skullOne.classList.remove("skull-1");
+        skullOne.classList.add("skull-2");
+    } else if(hasClass(skullOne, "skull-2")){
+        skullOne.classList.remove("skull-2");
+        skullOne.classList.add("skull-3");
+    } else if(hasClass(skullOne, "skull-3")){
+        skullOne.classList.remove("skull-3");
+        skullOne.classList.add("skull-1");
+        spawnSkull();
     }
 
-    // skull_1.classList.replace("skull-1", "skull-2");
-    // skull_2.classList.replace("skull-2", "skull-3");
-    // skull_3.classList.replace("skull-3", "skull-1");
     
+}
+
+function skullsAtLocation(xCordinate, yCordinate){
+    if(skullOneX == xCordinate && skullOneY == yCordinate){
+        return true;
+    } else if(skullTwoX == xCordinate && skullTwoY == yCordinate){
+        return true;
+    } else if(skullThreeX == xCordinate && skullThreeY == yCordinate){
+        return true;
+    } else{
+        return false;
+    }
 }
 
 //Base functions

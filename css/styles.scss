@@ -16,6 +16,10 @@ p{
     font-family: 'Open Sans', sans-serif;
 }
 
+.hidden{
+    display: none;
+}
+
 .dark{
     width: 100%;
     background: black;
@@ -31,7 +35,7 @@ p{
     position: relative;
     width: 50px;
     background: blue;
-    z-index: 2;
+    z-index: 3;
 }
 
 .box-base{
@@ -50,7 +54,7 @@ p{
     background-size: cover;
     position: relative;
     width: 50px;
-    z-index: 1;
+    z-index: 2;
 }
 
 /*Opstacles*/
@@ -75,6 +79,8 @@ p{
     background: url(../img/skull.png);
     background-size: cover;
     z-index: 3;
+
+    animation: skullShake $move-time;
 }
 
 /*Location of the box*/
@@ -281,3 +287,21 @@ p{
     45% {left:-11px; top:0px;}
     100% {left:0px; top:0px;}
 }
+
+@keyframes skullShake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
