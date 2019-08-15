@@ -47,6 +47,11 @@ var skullOne = document.querySelector(".skull-one");
 var skullTwo = document.querySelector(".skull-two");
 var skullThree = document.querySelector(".skull-three");
 
+//Skull states
+var skullOneState = "inactive";
+var skullTwoState = "inactive";
+var skullThreeState = "inactive";
+
 //Current location of the skull
 var skullOneLocationClass = "hidden";
 var skullTwoLocationClass = "hidden";
@@ -237,9 +242,9 @@ function reset(){
 
     document.getElementById("turn-count").innerHTML = turnCount;
 
-    // skullOne.classList.remove(skullLocationClass);
-    // skullLocationClass = "hidden";
-    // skullOne.classList.add(skullLocationClass);
+    skullOne.classList.remove(skullLocationClass);
+    skullLocationClass = "hidden";
+    skullOne.classList.add(skullLocationClass);
 
     spawnApple();
 }
@@ -255,10 +260,17 @@ function updateBoxLocation(){
 function updateTurn(){
     turnCount++;
     document.getElementById("turn-count").innerHTML = turnCount;
-    // spawnSkull();
-    if(turnCount > 4){
+    
+    skullGrow();
+
+    if(turnCount == 5){
+        spawnSkull();
+        skullOne.classList.remove(skullOneState);
+        skullOneState = "active";
+        skullOne.classList.add(skullOneState);
+
         // spawnSkull();
-        testVar(skullOneLocationClass);
+        //testVar(skullOneLocationClass);
     }
 }
 
@@ -280,8 +292,6 @@ function jumpToggle(){
 //Check Monster
 function monsterCheck(){
     checkForApple();
-    
-    skullGrowth();
 
     //Game over by skulls
     gameOver(skullOneX, skullOneY, skullOne);
@@ -336,30 +346,40 @@ function spawnSkull(){
     // }
 }
 
-function skullToSpawn(skullX, skullY, skull, locationClass){
+function skullToSpawn(skullX, skullY, skull, location){
     while(true){
         skullX = Math.floor(Math.random() * 5) + 1;
         skullY = Math.floor(Math.random() * 5) + 1;
         if(skullX != appleX && skullY != appleY){
-            skull.classList.remove(locationClass);
+            
+            skull.classList.remove(location);
+            var locationClass = ("item-" + skullX + "-" + skullY);
+            //Change location Class
+            if(location == skullOneLocationClass){
+                skullOneLocationClass = locationClass;
+            } else if(location == skullTwoLocationClass){
+                skullTwoLocationClass = locationClass;
+            } else if(location == skullThreeLocationClass){
+                skullThreeLocationClass = locationClass;
+            }
 
             console.log(locationClass);
             console.log(skullOneLocationClass);;
 
-            var locationClass = ("item-" + skullX + "-" + skullY);
+            
             skull.classList.add(locationClass);
             break;
         }
     }
 }
 
-function skullGrowth(){
-
-
-    skulls = document.querySelectorAll(".skull");
+function skullGrow(){
+    var skulls = document.querySelectorAll(".skull");
     
     skulls.forEach(skull => {
         if(skullOne.classList == null){
+            
+        } else if(hasClass(skull, "inactive")){
 
         } else if(hasClass(skull, "skull-1")){
             skull.classList.remove("skull-1");
@@ -372,6 +392,7 @@ function skullGrowth(){
             skull.classList.add("skull-1");
             spawnSkull();
         }
+        
     });
     
 
@@ -396,12 +417,23 @@ function gameOver(skullX, skullY, skull){
     }
 }
 
+//Test
 function testVar(svend){
     skullOneX = 2;
     skullOneY = 2;
     console.log(svend);
     skullOne.classList.remove(svend);
-    svend = ("item-" + skullOneX + "-" + skullOneY);
+    if(svend == skullOneLocationClass){
+        svend = ("item-" + skullOneX + "-" + skullOneY);
+        skullOneLocationClass = svend;
+    } else if(svend == skullTwoLocationClass){
+        svend = ("item-" + skullOneX + "-" + skullOneY);
+        skullTwoLocationClass = svend;
+    } else if(svend == skullThreeLocationClass){
+        svend = ("item-" + skullOneX + "-" + skullOneY);
+        skullThreeLocationClass = svend;
+    }
+    
     skullOne.classList.add(svend);
     console.log(svend);
 
