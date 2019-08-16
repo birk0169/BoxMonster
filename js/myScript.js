@@ -175,6 +175,7 @@ function updateBoxLocation(){
     boxMonster.classList.add(currentLocationClass);
 }
 
+//UPDATE
 //Updates the turn count
 function updateTurn(){
     turnCount++;
@@ -185,12 +186,12 @@ function updateTurn(){
     skullGrow(skullThree, skullThreeState);
     if(turnCount == 5){
         skullStateChange(skullOne, 1);
-        spawnSkull();
+        spawnSkull(skullOne);
     } 
-    // if(turnCount == 10){
-    //    skullStateChange(skullTwo, 1);
-    //     spawnSkull(2);
-    // }
+    if(turnCount == 10){
+       skullStateChange(skullTwo, 1);
+        spawnSkull(skullTwo);
+    }
     // if(turnCount == 15){
     //     skullStateChange(skullThree, 1);
     //     spawnSkull(3);
@@ -251,7 +252,7 @@ function checkForApple(){
 //Sound for apple
 
 //Skull logic
-function spawnSkull(){
+function spawnSkull(skull){
     // if(skullNumber == 1){
     //     skullToSpawn(skullOneX, skullOneY, skullOne, skullOneLocationClass);
     // } else if(skullNumber == 2){
@@ -259,7 +260,9 @@ function spawnSkull(){
     // } else{
     //     skullToSpawn(skullThreeX, skullThreeY, skullThree, skullThreeLocationClass);
     // }
-    skullToSpawn(skullOneX, skullOneY, skullOne, skullOneLocationClass);
+    if(skull == skullOne){
+        skullToSpawn(skullOneX, skullOneY, skullOne, skullOneLocationClass);
+    }
 }
 
 function skullToSpawn(skullX, skullY, skull, location){
@@ -303,7 +306,7 @@ function skullGrow(skull, state){
         skullStateChange(skull, 3);
     } else if(state == 3){
         skullStateChange(skull, 1);
-        spawnSkull();
+        spawnSkull(skull);
 
     }
 }
