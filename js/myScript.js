@@ -48,9 +48,9 @@ var skullTwo = document.querySelector(".skull-two");
 var skullThree = document.querySelector(".skull-three");
 
 //Skull states
-var skullOneState = "inactive";
-var skullTwoState = "inactive";
-var skullThreeState = "inactive";
+var skullOneState = "0";
+var skullTwoState = "0";
+var skullThreeState = "0";
 
 //Current location of the skull
 var skullOneLocationClass = "hidden";
@@ -70,7 +70,7 @@ function checkKey(e){
     e = e || window.event;
     if(e.keyCode == '39'){
         //left arrow
-        moveBoxLeft();
+        moveBoxRight();
     }
     else if(e.keyCode == '38'){
         //Up arrow
@@ -82,149 +82,66 @@ function checkKey(e){
     }
     else if(e.keyCode == '37'){
         //Right arrow
-        moveBoxRight();
+        moveBoxLeft();
 
     }
 }
 
-//Left
-function moveBoxLeft(){
-    if(Math.floor((new Date() - lastTime) < wait)){
-        // console.log("test");
-    } else if(boxLocationX != maxX){
-        jumpToggle();
-        //Updates the turn
-        updateTurn();
-        //Change box location X
-        boxLocationX = boxLocationX + 1;
-
-        boxMonster.classList.add("box-animation-right");
-        setTimeout(function(){
-        updateBoxLocation();
-        boxMonster.classList.remove("box-animation-right");
-
-        jumpToggle();
-        monsterCheck();
-        }, wait);
-        lastTime = new Date();
-        
-    } else{
-        switchCollision("box-collision-right");
-        lastTime = new Date();
-    }
-
-    
-    
+//Right
+function moveBoxRight(){
+    movement("right");
 }
 
 //Up
 function moveBoxUp(){
-    
-    if(Math.floor((new Date() - lastTime) < wait)){
-        // console.log("test");
-    } else if(boxLocationY != 1){
-        jumpToggle();
-        //Updates the turn
-        updateTurn();
-        //Change box location Y
-        boxLocationY = boxLocationY - 1;
-
-        boxMonster.classList.add("box-animation-up");
-        setTimeout(function(){
-        updateBoxLocation();
-        boxMonster.classList.remove("box-animation-up");
-
-        jumpToggle();
-        monsterCheck();
-        }, wait);
-        lastTime = new Date();
-        
-    } else{
-        switchCollision("box-collision-up");
-        lastTime = new Date();
-    }
+    movement("up");
     
 }
 
 //Down
 function moveBoxDown(){
-
-    if(Math.floor((new Date() - lastTime) < wait)){
-        // console.log("test");
-    } else if(boxLocationY != maxY){
-        jumpToggle();
-        //Updates the turn
-        updateTurn();
-        //Change box location Y
-        boxLocationY = boxLocationY + 1;
-
-        boxMonster.classList.add("box-animation-down");
-        setTimeout(function(){
-        updateBoxLocation();
-        boxMonster.classList.remove("box-animation-down");
-
-        jumpToggle();
-        monsterCheck();
-        }, wait);
-        lastTime = new Date();
-        
-    } else{
-        switchCollision("box-collision-down");
-        lastTime = new Date();
-    }
-    
+    movement("down");
 }
 
-//Right
-function moveBoxRight(){
-    
-    if(Math.floor((new Date() - lastTime) < wait)){
-        // console.log("test");
-    } else if(boxLocationX != 1){
-        jumpToggle();
-        //Updates the turn
-        updateTurn();
-        //Change box location X
-        boxLocationX = boxLocationX - 1;
-
-        boxMonster.classList.add("box-animation-left");
-        setTimeout(function(){
-            updateBoxLocation();
-            // theBox.classList.remove(currentLocationClass);
-            // currentLocationClass = "item-" + (boxLocationX) + "-" + boxLocationY;
-            // theBox.classList.add(currentLocationClass);
-            boxMonster.classList.remove("box-animation-left");
-
-            jumpToggle();
-            monsterCheck()
-        }, wait);
-        lastTime = new Date();
-        
-    } else{
-        switchCollision("box-collision-left");
-        lastTime = new Date();
-    }
-    
-
+//Left
+function moveBoxLeft(){
+    movement("left");
 }
 
 //Movement
-function movement(movementAnimation, direction, movementModifier){
-    jumpToggle();
-    //Updates the turn
-    updateTurn();
-    //Change box location X
-    direction = direction + movementModifier;
-
-    boxMonster.classList.add(movementAnimation);
-    setTimeout(function(){
-        updateBoxLocation();
-        boxMonster.classList.remove(movementAnimation);
-
+function movement(direction){
+    if(Math.floor((new Date() - lastTime) < wait)){
+        // console.log("test");
+    } else if(((direction == "left" && boxLocationX != 1) || (direction == "right" && boxLocationX != 5)) || ((direction == "up" && boxLocationY != 1) || (direction == "down" && boxLocationY != 5))){
         jumpToggle();
-        monsterCheck()
-    }, wait);
+        //Updates the turn
+        updateTurn();
+
+        //Change character location
+        if(direction == "left"){
+            boxLocationX = boxLocationX - 1;
+        } else if(direction == "up"){
+            boxLocationY = boxLocationY - 1;
+        } else if(direction == "down"){
+            boxLocationY = boxLocationY + 1;
+        } else{
+            boxLocationX = boxLocationX + 1;
+        }
+        
+        boxMonster.classList.add("box-animation-" + direction);
+        setTimeout(function(){
+            updateBoxLocation();
+            boxMonster.classList.remove("box-animation-" + direction);
+
+            jumpToggle();
+            monsterCheck();
+        }, wait);
         lastTime = new Date();
+        
+    } else{
+        switchCollision("box-collision-" + direction);
+        lastTime = new Date();
+    }
 
 }
 
@@ -261,16 +178,21 @@ function updateTurn(){
     turnCount++;
     document.getElementById("turn-count").innerHTML = turnCount;
     
-    skullGrow();
+    // skullGrow();
 
     if(turnCount == 5){
         spawnSkull();
-        skullOne.classList.remove(skullOneState);
-        skullOneState = "active";
-        skullOne.classList.add(skullOneState);
+        // skullOne.classList.remove(skullOneActive);
+        // skullOneActive = "active";
+        // skullOne.classList.add(skullOneActive);
 
         // spawnSkull();
         //testVar(skullOneLocationClass);
+    } 
+    if(turnCount == 10){
+        // skullTwo.classList.remove(skullTwoState);
+        // skullTwoState = "active";
+        // skullTwo.classList.add(skullTwoState);
     }
 }
 
@@ -334,16 +256,6 @@ function checkForApple(){
 //Skull logic
 function spawnSkull(){
     skullToSpawn(skullOneX, skullOneY, skullOne, skullOneLocationClass);
-    // while(true){
-    //     skullOneX = Math.floor(Math.random() * 5) + 1;
-    //     skullOneY = Math.floor(Math.random() * 5) + 1;
-    //     if(skullOneX != appleX && skullOneY != appleY){
-    //         skullOne.classList.remove(skullOneLocationClass);
-    //         skullOneLocationClass = "item-" + skullOneX + "-" + skullOneY;
-    //         skullOne.classList.add(skullOneLocationClass);
-    //         break;
-    //     }
-    // }
 }
 
 function skullToSpawn(skullX, skullY, skull, location){
@@ -379,7 +291,7 @@ function skullGrow(){
     skulls.forEach(skull => {
         if(skullOne.classList == null){
             
-        } else if(hasClass(skull, "inactive")){
+        } else if(hasClass(skull, "state-0")){
 
         } else if(hasClass(skull, "skull-1")){
             skull.classList.remove("skull-1");
@@ -394,8 +306,6 @@ function skullGrow(){
         }
         
     });
-    
-
     
 }
 
@@ -412,6 +322,7 @@ function skullsAtLocation(xCordinate, yCordinate){
 }
 
 function gameOver(skullX, skullY, skull){
+    console.log("test");
     if((boxLocationX == skullX && boxLocationY == skullY) && hasClass(skull, "skull-3")){
         reset();
     }
@@ -443,4 +354,23 @@ function testVar(svend){
 //Test to see if element contains specific class
 function hasClass(ele,cls) {
     return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+}
+
+
+//SkullGrow alt
+function skullGrow(skull){
+    var skulls = document.querySelectorAll(".skull");
+    skullStateChange(skull, 1)
+    skull.classList.remove
+}
+
+function skullStateChange(skull, state){
+    if(skull == skullOne){
+        skull.classList.remove(skull);
+        skullOneState = state;
+    } else if(skull == skullTwo){
+        skullTwoState = state;
+    } else if(skull == skullThree){
+        skullThreeState = state;
+    }
 }
