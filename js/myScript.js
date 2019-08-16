@@ -157,11 +157,13 @@ function reset(){
     playerScore = 0;
     scoreCounter.innerHTML = playerScore;
 
-    document.getElementById("turn-count").innerHTML = turnCount;
+    skullReset();
 
-    skullOne.classList.remove(skullLocationClass);
-    skullLocationClass = "hidden";
-    skullOne.classList.add(skullLocationClass);
+    //document.getElementById("turn-count").innerHTML = turnCount;
+
+    // skullOne.classList.remove(skullLocationClass);
+    // skullLocationClass = "hidden";
+    // skullOne.classList.add(skullLocationClass);
 
     spawnApple();
 }
@@ -176,24 +178,23 @@ function updateBoxLocation(){
 //Updates the turn count
 function updateTurn(){
     turnCount++;
-    document.getElementById("turn-count").innerHTML = turnCount;
+    //document.getElementById("turn-count").innerHTML = turnCount;
     
-    // skullGrow();
-
+    skullGrow(skullOne, skullOneState);
+    skullGrow(skullTwo, skullTwoState);
+    skullGrow(skullThree, skullThreeState);
     if(turnCount == 5){
+        skullStateChange(skullOne, 1);
         spawnSkull();
-        // skullOne.classList.remove(skullOneActive);
-        // skullOneActive = "active";
-        // skullOne.classList.add(skullOneActive);
-
-        // spawnSkull();
-        //testVar(skullOneLocationClass);
     } 
-    if(turnCount == 10){
-        // skullTwo.classList.remove(skullTwoState);
-        // skullTwoState = "active";
-        // skullTwo.classList.add(skullTwoState);
-    }
+    // if(turnCount == 10){
+    //    skullStateChange(skullTwo, 1);
+    //     spawnSkull(2);
+    // }
+    // if(turnCount == 15){
+    //     skullStateChange(skullThree, 1);
+    //     spawnSkull(3);
+    // } 
 }
 
 //Switch Collision Class
@@ -214,14 +215,10 @@ function jumpToggle(){
 //Check Monster
 function monsterCheck(){
     checkForApple();
-
     //Game over by skulls
-    gameOver(skullOneX, skullOneY, skullOne);
-    gameOver(skullTwoX, skullTwo, skullTwo);
-    gameOver(skullThreeX, skullThreeY, skullThree);
-    // if((boxLocationX == skullOneX && boxLocationY == skullOneY) && hasClass(skullOne, "skull-3")){
-    //     reset();
-    // }
+    gameOver(skullOneX, skullOneY, skullOneState);
+    gameOver(skullTwoX, skullTwoY, skullTwoState);
+    gameOver(skullThreeX, skullThreeY, skullThreeState);
     
 }
 
@@ -255,6 +252,13 @@ function checkForApple(){
 
 //Skull logic
 function spawnSkull(){
+    // if(skullNumber == 1){
+    //     skullToSpawn(skullOneX, skullOneY, skullOne, skullOneLocationClass);
+    // } else if(skullNumber == 2){
+    //     skullToSpawn(skullTwoX, skullTwoY, skullTwo, skullTwoLocationClass);
+    // } else{
+    //     skullToSpawn(skullThreeX, skullThreeY, skullThree, skullThreeLocationClass);
+    // }
     skullToSpawn(skullOneX, skullOneY, skullOne, skullOneLocationClass);
 }
 
@@ -269,14 +273,20 @@ function skullToSpawn(skullX, skullY, skull, location){
             //Change location Class
             if(location == skullOneLocationClass){
                 skullOneLocationClass = locationClass;
+                skullOneY = skullY;
+                skullOneX = skullX;
             } else if(location == skullTwoLocationClass){
                 skullTwoLocationClass = locationClass;
+                skullTwoY = skullY;
+                skullTwoX = skullX;
             } else if(location == skullThreeLocationClass){
                 skullThreeLocationClass = locationClass;
+                skullThreeY = skullY;
+                skullThreeX = skullX;
             }
 
-            console.log(locationClass);
-            console.log(skullOneLocationClass);;
+            // console.log(locationClass);
+            // console.log(skullOneLocationClass);;
 
             
             skull.classList.add(locationClass);
@@ -285,30 +295,37 @@ function skullToSpawn(skullX, skullY, skull, location){
     }
 }
 
-function skullGrow(){
-    var skulls = document.querySelectorAll(".skull");
-    
-    skulls.forEach(skull => {
-        if(skullOne.classList == null){
-            
-        } else if(hasClass(skull, "state-0")){
+//SkullGrow alt
+function skullGrow(skull, state){
+    if(state == 1){
+        skullStateChange(skull, 2);
+    } else if(state == 2){
+        skullStateChange(skull, 3);
+    } else if(state == 3){
+        skullStateChange(skull, 1);
+        spawnSkull();
 
-        } else if(hasClass(skull, "skull-1")){
-            skull.classList.remove("skull-1");
-            skull.classList.add("skull-2");
-        } else if(hasClass(skull, "skull-2")){
-            skull.classList.remove("skull-2");
-            skull.classList.add("skull-3");
-        } else if(hasClass(skull, "skull-3")){
-            skull.classList.remove("skull-3");
-            skull.classList.add("skull-1");
-            spawnSkull();
-        }
-        
-    });
-    
+    }
 }
 
+//Change the state of an input skull
+function skullStateChange(skull, state){
+    if(skull == skullOne){
+        skull.classList.remove("state-" + skullOneState);
+        skullOneState = state;
+        skull.classList.add("state-" + skullOneState);
+    } else if(skull == skullTwo){
+        skull.classList.remove("state-" + skullTwoState);
+        skullTwoState = state;
+        skull.classList.add("state-" + skullTwoState);
+    } else if(skull == skullThree){
+        skull.classList.remove("state-" + skullThreeState);
+        skullThreeState = state;
+        skull.classList.add("state-" + skullThreeState);
+    }
+}
+
+//Check for skulls
 function skullsAtLocation(xCordinate, yCordinate){
     if(skullOneX == xCordinate && skullOneY == yCordinate){
         return true;
@@ -321,9 +338,9 @@ function skullsAtLocation(xCordinate, yCordinate){
     }
 }
 
-function gameOver(skullX, skullY, skull){
-    console.log("test");
-    if((boxLocationX == skullX && boxLocationY == skullY) && hasClass(skull, "skull-3")){
+function gameOver(skullX, skullY, state){
+    if((boxLocationX == skullX && boxLocationY == skullY) && state == 3){
+        console.log("Game over");
         reset();
     }
 }
@@ -356,21 +373,35 @@ function hasClass(ele,cls) {
     return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
 }
 
+function skullReset(){
+    
+    //Skull one location reset
+    skullOneX = 0;
+    skullOneY = 0;
 
-//SkullGrow alt
-function skullGrow(skull){
-    var skulls = document.querySelectorAll(".skull");
-    skullStateChange(skull, 1)
-    skull.classList.remove
+    skullOne.classList.remove(skullOneLocationClass);
+    skullOneLocationClass = ("item-" + skullOneX + "-" + skullOneY);
+    skullOne.classList.remove(skullOneLocationClass);
+
+    //Skull two location reset
+    skullTwoX = 0;
+    skullTwoY = 0;
+
+    skullTwo.classList.remove(skullTwoLocationClass);
+    skullTwoLocationClass = ("item-" + skullTwoX + "-" + skullTwoY);
+    skullTwo.classList.remove(skullTwoLocationClass);
+
+    //Skull three location reset
+    skullThreeX = 0;
+    skullThreeY = 0;
+
+    skullThree.classList.remove(skullThreeLocationClass);
+    skullThreeLocationClass = ("item-" + skullThreeX + "-" + skullThreeY);
+    skullThree.classList.remove(skullThreeLocationClass);
+
+
+    skullStateChange(skullOne, 0);
+    skullStateChange(skullTwo, 0);
+    skullStateChange(skullThree, 0);
 }
 
-function skullStateChange(skull, state){
-    if(skull == skullOne){
-        skull.classList.remove(skull);
-        skullOneState = state;
-    } else if(skull == skullTwo){
-        skullTwoState = state;
-    } else if(skull == skullThree){
-        skullThreeState = state;
-    }
-}

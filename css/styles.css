@@ -11,7 +11,7 @@ p {
   font-family: 'Open Sans', sans-serif;
 }
 
-.hidden {
+.state-0 {
   display: none;
 }
 
@@ -59,17 +59,17 @@ p {
   z-index: 1;
 }
 
-.skull-1 {
+.state-1 {
   background: url(../img/skull-shadow-1.png);
   background-size: cover;
 }
 
-.skull-2 {
+.state-2 {
   background: url(../img/skull-shadow-2.png);
   background-size: cover;
 }
 
-.skull-3 {
+.state-3 {
   background: url(../img/skull-2.png);
   background-size: cover;
   z-index: 3;
