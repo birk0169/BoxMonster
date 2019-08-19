@@ -57,6 +57,20 @@ var skullOneLocationClass = "hidden";
 var skullTwoLocationClass = "hidden";
 var skullThreeLocationClass = "hidden";
 
+//objects
+//Objects
+function Hazard(hazardElement, xAxis, yAxis, hazardClass, state){
+    this.hazardElement = hazardElement;
+    this.xAxis = xAxis;
+    this.yAxis = yAxis;
+    this.hazardClass = hazardClass;
+    this.state = state;
+}
+
+var skullOne2 = new Hazard(document.querySelector(".skull-one"), 0, 0, "hidden", 0);
+var skullTwo2 = new Hazard(document.querySelector(".skull-two"), 0, 0, "hidden", 0);
+var skullThree2 = new Hazard(document.querySelector(".skull-three"), 0, 0, "hidden", 0);
+
 //Wait
 var wait = 250;
 
@@ -186,12 +200,16 @@ function updateTurn(){
     skullGrow(skullThree, skullThreeState);
     if(turnCount == 5){
         skullStateChange(skullOne, 1);
-        spawnSkull(skullOne);
+        skullSpawn(skullOne);
     } 
-    if(turnCount == 10){
+    if(turnCount == 11){
        skullStateChange(skullTwo, 1);
-        spawnSkull(skullTwo);
+        skullSpawn(skullTwo);
     }
+    if(turnCount == 17){
+        skullStateChange(skullThree, 1);
+         skullSpawn(skullThree);
+     }
     // if(turnCount == 15){
     //     skullStateChange(skullThree, 1);
     //     spawnSkull(3);
@@ -252,16 +270,13 @@ function checkForApple(){
 //Sound for apple
 
 //Skull logic
-function spawnSkull(skull){
-    // if(skullNumber == 1){
-    //     skullToSpawn(skullOneX, skullOneY, skullOne, skullOneLocationClass);
-    // } else if(skullNumber == 2){
-    //     skullToSpawn(skullTwoX, skullTwoY, skullTwo, skullTwoLocationClass);
-    // } else{
-    //     skullToSpawn(skullThreeX, skullThreeY, skullThree, skullThreeLocationClass);
-    // }
+function skullSpawn(skull){
     if(skull == skullOne){
         skullToSpawn(skullOneX, skullOneY, skullOne, skullOneLocationClass);
+    } else if(skull == skullTwo){
+        skullToSpawn(skullTwoX, skullTwoY, skullTwo, skullTwoLocationClass);
+    } else if(skull == skullThree){
+        skullToSpawn(skullThreeX, skullThreeY, skullThree, skullThreeLocationClass);
     }
 }
 
@@ -306,7 +321,7 @@ function skullGrow(skull, state){
         skullStateChange(skull, 3);
     } else if(state == 3){
         skullStateChange(skull, 1);
-        spawnSkull(skull);
+        skullSpawn(skull);
 
     }
 }
@@ -383,24 +398,24 @@ function skullReset(){
     skullOneY = 0;
 
     skullOne.classList.remove(skullOneLocationClass);
-    skullOneLocationClass = ("item-" + skullOneX + "-" + skullOneY);
-    skullOne.classList.remove(skullOneLocationClass);
+    skullOneLocationClass = "hidden";
+    // skullOne.classList.remove(skullOneLocationClass);
 
     //Skull two location reset
     skullTwoX = 0;
     skullTwoY = 0;
 
     skullTwo.classList.remove(skullTwoLocationClass);
-    skullTwoLocationClass = ("item-" + skullTwoX + "-" + skullTwoY);
-    skullTwo.classList.remove(skullTwoLocationClass);
+    skullTwoLocationClass = "hidden";
+    // skullTwo.classList.remove(skullTwoLocationClass);
 
     //Skull three location reset
     skullThreeX = 0;
     skullThreeY = 0;
 
     skullThree.classList.remove(skullThreeLocationClass);
-    skullThreeLocationClass = ("item-" + skullThreeX + "-" + skullThreeY);
-    skullThree.classList.remove(skullThreeLocationClass);
+    skullThreeLocationClass = "hidden";
+    // skullThree.classList.remove(skullThreeLocationClass);
 
 
     skullStateChange(skullOne, 0);
