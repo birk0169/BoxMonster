@@ -289,28 +289,28 @@ function skullToSpawn(skullX, skullY, skull, location){
         skullY = Math.floor(Math.random() * 5) + 1;
         if(skullX != appleX && skullY != appleY){
             
-            skull.classList.remove(location);
+            
             var locationClass = ("item-" + skullX + "-" + skullY);
+            var newClass = "state-1 " + locationClass + " skull";
             //Change location Class
             if(location == skullOneLocationClass){
                 skullOneLocationClass = locationClass;
+                newClass = "skull-one " + newClass;
                 skullOneY = skullY;
                 skullOneX = skullX;
             } else if(location == skullTwoLocationClass){
                 skullTwoLocationClass = locationClass;
+                newClass = "skull-two " + newClass;
                 skullTwoY = skullY;
                 skullTwoX = skullX;
             } else if(location == skullThreeLocationClass){
                 skullThreeLocationClass = locationClass;
+                newClass = "skull-three " + newClass;
                 skullThreeY = skullY;
                 skullThreeX = skullX;
             }
 
-            // console.log(locationClass);
-            // console.log(skullOneLocationClass);;
-
-            
-            skull.classList.add(locationClass);
+            skull.classList = newClass;
             break;
         }
     }
@@ -402,8 +402,9 @@ function skullReset(){
 
     console.log("SkullOne " + skullOneLocationClass);
 
-    skullOne.classList.remove(skullOneLocationClass);
+    // skullOne.classList.remove(skullOneLocationClass);
     skullOneLocationClass = "hidden";
+    skullOne.classList = "state-0 skull-one skull hidden";
     // skullOne.classList.remove(skullOneLocationClass);
 
     //Skull two location reset
@@ -413,8 +414,9 @@ function skullReset(){
 
     console.log("SkullTwo " + skullTwoLocationClass);
 
-    skullTwo.classList.remove(skullTwoLocationClass);
+    // skullTwo.classList.remove(skullTwoLocationClass);
     skullTwoLocationClass = "hidden";
+    skullTwo.classList = "state-0 skull-two skull hidden";
     // skullTwo.classList.remove(skullTwoLocationClass);
 
     //Skull three location reset
@@ -423,8 +425,9 @@ function skullReset(){
 
     console.log("SkullThree " + skullThreeLocationClass);
 
-    skullThree.classList.remove(skullThreeLocationClass);
+    // skullThree.classList.remove(skullThreeLocationClass);
     skullThreeLocationClass = "hidden";
+    skullThree.classList = "state-0 skull-three skull hidden";
     // skullThree.classList.remove(skullThreeLocationClass);
 
 
