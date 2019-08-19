@@ -20,7 +20,7 @@ var boxLocationY = 3;
 var boxMonster = document.querySelector(".box");
 
 ////Current location class of the box monster
-var currentLocationClass = "item-3-3";
+// var currentLocationClass = "item-3-3";
 
 //APPLE
 ////Cordinates of the apple
@@ -30,7 +30,7 @@ var appleY = 1;
 var apple = document.querySelector(".apple");
 
 //Current location class of the apple
-var appleLocationClass = "hidden";
+// var appleLocationClass = "hidden";
 
 //SKULL
 //cordincates of the skull
@@ -52,10 +52,6 @@ var skullOneState = "0";
 var skullTwoState = "0";
 var skullThreeState = "0";
 
-//Current location of the skull
-var skullOneLocationClass = "hidden";
-var skullTwoLocationClass = "hidden";
-var skullThreeLocationClass = "hidden";
 
 //objects
 //Objects
@@ -63,13 +59,12 @@ function Hazard(hazardElement, xAxis, yAxis, hazardClass, state){
     this.hazardElement = hazardElement;
     this.xAxis = xAxis;
     this.yAxis = yAxis;
-    this.hazardClass = hazardClass;
     this.state = state;
 }
 
-var skullOne2 = new Hazard(document.querySelector(".skull-one"), 0, 0, "hidden", 0);
-var skullTwo2 = new Hazard(document.querySelector(".skull-two"), 0, 0, "hidden", 0);
-var skullThree2 = new Hazard(document.querySelector(".skull-three"), 0, 0, "hidden", 0);
+var skullOne2 = new Hazard(document.querySelector(".skull-one"), 0, 0, 0);
+var skullTwo2 = new Hazard(document.querySelector(".skull-two"), 0, 0, 0);
+var skullThree2 = new Hazard(document.querySelector(".skull-three"), 0, 0, 0);
 
 //Wait
 var wait = 250;
@@ -127,7 +122,8 @@ function movement(direction){
     if(Math.floor((new Date() - lastTime) < wait)){
         // console.log("test");
     } else if(((direction == "left" && boxLocationX != 1) || (direction == "right" && boxLocationX != 5)) || ((direction == "up" && boxLocationY != 1) || (direction == "down" && boxLocationY != 5))){
-        jumpToggle();
+        // jumpToggle();
+        boxMonster.classList.add("box-jump");
         //Updates the turn
         updateTurn();
 
@@ -149,7 +145,6 @@ function movement(direction){
             monsterCheck();
             boxMonster.classList.remove("box-animation-" + direction);
 
-            jumpToggle();
             monsterCheck();
         }, wait);
         lastTime = new Date();
@@ -187,9 +182,11 @@ function reset(){
 
 //Update the boxes current location after it moves
 function updateBoxLocation(){
-    boxMonster.classList.remove(currentLocationClass);
-    currentLocationClass = "item-" + (boxLocationX) + "-" + boxLocationY;
-    boxMonster.classList.add(currentLocationClass);
+    // boxMonster.classList.remove(currentLocationClass);
+    // currentLocationClass = "item-" + (boxLocationX) + "-" + boxLocationY;
+    boxMonster.classList = "box box-base item-" + (boxLocationX) + "-" + boxLocationY;
+
+    // boxMonster.classList.add(currentLocationClass);
 }
 
 //UPDATE
@@ -213,10 +210,6 @@ function updateTurn(){
         skullStateChange(skullThree, 1);
          skullSpawn(skullThree);
      }
-    // if(turnCount == 15){
-    //     skullStateChange(skullThree, 1);
-    //     spawnSkull(3);
-    // } 
 }
 
 //Switch Collision Class
@@ -230,8 +223,7 @@ function switchCollision(collisionClass){
 
 //Jump toggle
 function jumpToggle(){
-    boxMonster.classList.toggle("box-base");
-    boxMonster.classList.toggle("box-jump");
+    boxMonster.classList.add("box-jump");
 }
 
 //Check Monster
@@ -251,9 +243,8 @@ function spawnApple(){
         appleX = Math.floor(Math.random() * 5) + 1;
         appleY = Math.floor(Math.random() * 5) + 1;
         if((appleX != boxLocationX && appleY != boxLocationY) && !skullsAtLocation(appleX, appleY)){
-            apple.classList.remove(appleLocationClass);
-            appleLocationClass = "item-" + appleX + "-" + appleY;
-            apple.classList.add(appleLocationClass);
+            // appleLocationClass = "item-" + appleX + "-" + appleY;
+            apple.classList = "apple item-" + appleX + "-" + appleY;
             break;
         }
     }
@@ -275,15 +266,15 @@ function checkForApple(){
 //Skull logic
 function skullSpawn(skull){
     if(skull == skullOne){
-        skullToSpawn(skullOneX, skullOneY, skullOne, skullOneLocationClass);
+        skullToSpawn(skullOneX, skullOneY, skullOne);
     } else if(skull == skullTwo){
-        skullToSpawn(skullTwoX, skullTwoY, skullTwo, skullTwoLocationClass);
+        skullToSpawn(skullTwoX, skullTwoY, skullTwo);
     } else if(skull == skullThree){
-        skullToSpawn(skullThreeX, skullThreeY, skullThree, skullThreeLocationClass);
+        skullToSpawn(skullThreeX, skullThreeY, skullThree);
     }
 }
 
-function skullToSpawn(skullX, skullY, skull, location){
+function skullToSpawn(skullX, skullY, skull){
     while(true){
         skullX = Math.floor(Math.random() * 5) + 1;
         skullY = Math.floor(Math.random() * 5) + 1;
@@ -293,18 +284,18 @@ function skullToSpawn(skullX, skullY, skull, location){
             var locationClass = ("item-" + skullX + "-" + skullY);
             var newClass = "state-1 " + locationClass + " skull";
             //Change location Class
-            if(location == skullOneLocationClass){
-                skullOneLocationClass = locationClass;
+            if(skull == skullOne){
+                // skullOneLocationClass = locationClass;
                 newClass = "skull-one " + newClass;
                 skullOneY = skullY;
                 skullOneX = skullX;
-            } else if(location == skullTwoLocationClass){
-                skullTwoLocationClass = locationClass;
+            } else if(skull == skullTwo){
+                // skullTwoLocationClass = locationClass;
                 newClass = "skull-two " + newClass;
                 skullTwoY = skullY;
                 skullTwoX = skullX;
-            } else if(location == skullThreeLocationClass){
-                skullThreeLocationClass = locationClass;
+            } else if(skull == skullThree){
+                // skullThreeLocationClass = locationClass;
                 newClass = "skull-three " + newClass;
                 skullThreeY = skullY;
                 skullThreeX = skullX;
@@ -367,26 +358,26 @@ function gameOver(skullX, skullY, state){
 }
 
 //Test
-function testVar(svend){
-    skullOneX = 2;
-    skullOneY = 2;
-    console.log(svend);
-    skullOne.classList.remove(svend);
-    if(svend == skullOneLocationClass){
-        svend = ("item-" + skullOneX + "-" + skullOneY);
-        skullOneLocationClass = svend;
-    } else if(svend == skullTwoLocationClass){
-        svend = ("item-" + skullOneX + "-" + skullOneY);
-        skullTwoLocationClass = svend;
-    } else if(svend == skullThreeLocationClass){
-        svend = ("item-" + skullOneX + "-" + skullOneY);
-        skullThreeLocationClass = svend;
-    }
+// function testVar(svend){
+//     skullOneX = 2;
+//     skullOneY = 2;
+//     console.log(svend);
+//     skullOne.classList.remove(svend);
+//     if(svend == skullOneLocationClass){
+//         svend = ("item-" + skullOneX + "-" + skullOneY);
+//         skullOneLocationClass = svend;
+//     } else if(svend == skullTwoLocationClass){
+//         svend = ("item-" + skullOneX + "-" + skullOneY);
+//         skullTwoLocationClass = svend;
+//     } else if(svend == skullThreeLocationClass){
+//         svend = ("item-" + skullOneX + "-" + skullOneY);
+//         skullThreeLocationClass = svend;
+//     }
     
-    skullOne.classList.add(svend);
-    console.log(svend);
+//     skullOne.classList.add(svend);
+//     console.log(svend);
 
-}
+// }
 
 //Base functions
 //Test to see if element contains specific class
@@ -400,35 +391,24 @@ function skullReset(){
     skullOneX = 0;
     skullOneY = 0;
 
-    console.log("SkullOne " + skullOneLocationClass);
-
-    // skullOne.classList.remove(skullOneLocationClass);
-    skullOneLocationClass = "hidden";
+    // skullOneLocationClass = "hidden";
     skullOne.classList = "state-0 skull-one skull hidden";
-    // skullOne.classList.remove(skullOneLocationClass);
 
     //Skull two location reset
     skullTwoX = 0;
     skullTwoY = 0;
 
 
-    console.log("SkullTwo " + skullTwoLocationClass);
-
-    // skullTwo.classList.remove(skullTwoLocationClass);
-    skullTwoLocationClass = "hidden";
+    // skullTwoLocationClass = "hidden";
     skullTwo.classList = "state-0 skull-two skull hidden";
-    // skullTwo.classList.remove(skullTwoLocationClass);
 
     //Skull three location reset
     skullThreeX = 0;
     skullThreeY = 0;
 
-    console.log("SkullThree " + skullThreeLocationClass);
 
-    // skullThree.classList.remove(skullThreeLocationClass);
-    skullThreeLocationClass = "hidden";
+    // skullThreeLocationClass = "hidden";
     skullThree.classList = "state-0 skull-three skull hidden";
-    // skullThree.classList.remove(skullThreeLocationClass);
 
 
     skullStateChange(skullOne, 0);
