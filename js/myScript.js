@@ -144,7 +144,9 @@ function movement(direction){
         
         boxMonster.classList.add("box-animation-" + direction);
         setTimeout(function(){
+            
             updateBoxLocation();
+            monsterCheck();
             boxMonster.classList.remove("box-animation-" + direction);
 
             jumpToggle();
@@ -159,6 +161,7 @@ function movement(direction){
 
 }
 
+//Resets the Game
 function reset(){
     //console.log("test");
 
@@ -397,6 +400,8 @@ function skullReset(){
     skullOneX = 0;
     skullOneY = 0;
 
+    console.log("SkullOne " + skullOneLocationClass);
+
     skullOne.classList.remove(skullOneLocationClass);
     skullOneLocationClass = "hidden";
     // skullOne.classList.remove(skullOneLocationClass);
@@ -405,6 +410,9 @@ function skullReset(){
     skullTwoX = 0;
     skullTwoY = 0;
 
+
+    console.log("SkullTwo " + skullTwoLocationClass);
+
     skullTwo.classList.remove(skullTwoLocationClass);
     skullTwoLocationClass = "hidden";
     // skullTwo.classList.remove(skullTwoLocationClass);
@@ -412,6 +420,8 @@ function skullReset(){
     //Skull three location reset
     skullThreeX = 0;
     skullThreeY = 0;
+
+    console.log("SkullThree " + skullThreeLocationClass);
 
     skullThree.classList.remove(skullThreeLocationClass);
     skullThreeLocationClass = "hidden";
