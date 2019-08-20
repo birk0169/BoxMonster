@@ -30,7 +30,8 @@ var appleY = 1;
 var apple = document.querySelector(".apple");
 
 //SKULL
-
+var nextSkull = 5;
+var currentSkull = 0;
 
 //Objects
 function Hazard(hazardElement, xAxis, yAxis, state, hazardClass){
@@ -58,8 +59,11 @@ function Hazard(hazardElement, xAxis, yAxis, state, hazardClass){
 var skullOne = new Hazard(document.querySelector(".skull-one"), 0, 0, 0, "skull-one");
 var skullTwo = new Hazard(document.querySelector(".skull-two"), 0, 0, 0, "skull-two");
 var skullThree = new Hazard(document.querySelector(".skull-three"), 0, 0, 0, "skull-three");
+var skullFour = new Hazard(document.querySelector(".skull-four"), 0, 0, 0, "skull-four");
+var skullFive = new Hazard(document.querySelector(".skull-five"), 0, 0, 0, "skull-five");
+var skullSix = new Hazard(document.querySelector(".skull-six"), 0, 0, 0, "skull-six");
 
-var skulls = [skullOne, skullTwo, skullThree];
+var skulls = [skullOne, skullTwo, skullThree, skullFour, skullFive, skullSix];
 
 //Wait
 var wait = 250;
@@ -72,19 +76,19 @@ spawnApple();
 
 function checkKey(e){
     e = e || window.event;
-    if(e.keyCode == '39'){
+    if((e.keyCode == '39') || (e.keyCode == '68')){
         //left arrow
         moveBoxRight();
     }
-    else if(e.keyCode == '38'){
+    else if((e.keyCode == '38') || (e.keyCode == '87')){
         //Up arrow
         moveBoxUp();
     }
-    else if(e.keyCode == '40'){
+    else if((e.keyCode == '40') || (e.keyCode == '83')){
         //down arrow
         moveBoxDown();
     }
-    else if(e.keyCode == '37'){
+    else if((e.keyCode == '37') || (e.keyCode == '65')){
         //Right arrow
         moveBoxLeft();
 
@@ -155,14 +159,20 @@ function movement(direction){
 function reset(){
     //console.log("test");
 
+    //Log score
     if(playerScore > 0){
         console.log("Game Over - Score: " + playerScore);
     }
 
+    //Reset player location
     boxLocationX = 3;
     boxLocationY = 3;
 
     updateBoxLocation();
+
+    //Reset game variables
+    currentSkull = 0;
+    nextSkull = 5;
 
     turnCount = 0;
     playerScore = 0;
@@ -176,6 +186,7 @@ function reset(){
     // skullLocationClass = "hidden";
     // skullOne.classList.add(skullLocationClass);
 
+    //Spawn new apple
     spawnApple();
 
 }
@@ -193,38 +204,28 @@ function updateBoxLocation(){
 //Updates the turn count
 function updateTurn(){
     turnCount++;
-    //document.getElementById("turn-count").innerHTML = turnCount;
+
+    skullGrow();
+
+    newSkull();
+     
+}
+
+
+
+function newSkull(){
+    if((turnCount == nextSkull) && (currentSkull != 6)){
+        var turnTilNextSkull = 5;
+        if(turnCount > 15){
+            turnTilNextSkull = 10;
+        }
+        nextSkull = nextSkull + turnTilNextSkull;
     
-    // skullGrow(skullOne, skullOneState);
-    // skullGrow(skullTwo, skullTwoState);
-    // skullGrow(skullThree, skullThreeState);
-
-    // skulls.forEach(skull =>{
-    //     skullGrow(skull);
-    // });
-
-    skullGrow(skulls[0]);
-    skullGrow(skulls[1]);
-    skullGrow(skulls[2]);
-
-    if(turnCount == 5){
-        // skullStateChange(skulls[0], 1);
-
-        skulls[0].state = 1;
-        skullSpawn(skulls[0]);
-    } 
-    if(turnCount == 11){
-    //    skullStateChange(skulls[1], 1);
-
-        skulls[1].state = 1;
-        skullSpawn(skulls[1]);
+        skulls[currentSkull].state = 1;
+        skullSpawn(skulls[currentSkull]);
+    
+        currentSkull++;
     }
-    if(turnCount == 17){
-        // skullStateChange(skulls[2], 1);
-
-        skulls[2].state = 1;
-        skullSpawn(skulls[2]);
-     }
 }
 
 //Switch Collision Class
@@ -268,7 +269,13 @@ function spawnApple(){
 //Check for apple
 function checkForApple(){
     if(appleX == boxLocationX && appleY == boxLocationY){
-        playerScore += 50;
+        var pointsForApple = 50;
+        if(turnCount > 30){
+            pointsForApple = 150;
+        } else if(turnCount > 15){
+            pointsForApple = 100;
+        }
+        playerScore += pointsForApple;
         scoreCounter.innerHTML = playerScore;
         spawnApple();
         
@@ -339,21 +346,22 @@ function skullToSpawn(skull){
 // }
 
 //SkullGrow OOP
-function skullGrow(skull){
-    if(skull.state == 1){
-        skullStateChange(skull, 2);
-    } else if(skull.state == 2){
-        skullStateChange(skull, 3);
-    } else if(skull.state == 3){
-        skullStateChange(skull, 1);
-        try{
-            skullSpawn(skull);
-        } catch(err){
-            console.log(err);
+function skullGrow(){
+    skulls.forEach(skull =>{
+        if(skull.state == 1){
+            skullStateChange(skull, 2);
+        } else if(skull.state == 2){
+            skullStateChange(skull, 3);
+        } else if(skull.state == 3){
+            skullStateChange(skull, 1);
+            try{
+                skullSpawn(skull);
+            } catch(err){
+                console.log(err);
+            }
         }
-        //skullSpawn(skull);
-
-    }
+    });
+    
 }
 
 //Change the state of an input skull
