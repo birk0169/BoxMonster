@@ -3,6 +3,10 @@ body {
   margin: 0;
 }
 
+button {
+  display: block;
+}
+
 h1, h2, h3, button {
   font-family: 'Lexend Tera', sans-serif;
 }
