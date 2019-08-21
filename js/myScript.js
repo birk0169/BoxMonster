@@ -70,29 +70,44 @@ var skullThree = new Hazard(document.querySelector(".skull-three"), 0, 0, 0, "sk
 var skullFour = new Hazard(document.querySelector(".skull-four"), 0, 0, 0, "skull-four");
 var skullFive = new Hazard(document.querySelector(".skull-five"), 0, 0, 0, "skull-five");
 var skullSix = new Hazard(document.querySelector(".skull-six"), 0, 0, 0, "skull-six");
+var skullSeven = new Hazard(document.querySelector(".skull-seven"), 0, 0, 0, "skull-seven");
+var skullEight = new Hazard(document.querySelector(".skull-eight"), 0, 0, 0, "skull-eight");
+var skullNine = new Hazard(document.querySelector(".skull-nine"), 0, 0, 0, "skull-nine");
+var skullTen = new Hazard(document.querySelector(".skull-ten"), 0, 0, 0, "skull-ten");
 
-var skulls = [skullOne, skullTwo, skullThree, skullFour, skullFive, skullSix];
+
+var skulls = [skullOne, skullTwo, skullThree, skullFour, skullFive, skullSix, skullSeven, skullEight, skullNine, skullTen];
 
 //Wait
 var wait = 250;
 
 //Test Sound
-var jumpSound = new Audio("sounds/jump.mp3");
-var munchSound = new Audio("sounds/bite.mp3");
+var snd1 = new Audio();
+var src1 = document.createElement("source");
+src1.type = "audio/mpeg";
+src1.src = "sounds/jump.mp3";
+snd1.appendChild(src1);
+
+var snd2 = new Audio();
+var src2 = document.createElement("source");
+src2.type = "audio/mpeg";
+src2.src = "sounds/bite.mp3";
+snd2.appendChild(src2);
 
 
 //FUNCTIONS
 //Sounds
 function playJump(){
-    jumpSound.pause();
-    jumpSound.currentTime = 0;
-    jumpSound.play();
+    snd1.pause();
+    snd1.currentTime = 0;
+    snd1.play();
 }
 
 function playMunch(){
-    munchSound.pause();
-    munchSound.currentTime = 0.2;
-    munchSound.play();
+    snd2.pause();
+    snd2.currentTime = 0.15;
+    snd2.play();
+    
 }
 
 
@@ -266,9 +281,11 @@ function updateTurn(){
 
 
 function newSkull(){
-    if((turnCount == nextSkull) && (currentSkull != 6)){
+    if((turnCount == nextSkull) && (currentSkull != 10)){
         var turnTilNextSkull = 5;
-        if(turnCount > 15){
+        if(turnCount > 45){
+            turnTilNextSkull = 15;
+        } else if(turnCount > 15){
             turnTilNextSkull = 10;
         }
         nextSkull = nextSkull + turnTilNextSkull;

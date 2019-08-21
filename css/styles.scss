@@ -20,8 +20,13 @@ p{
     font-family: 'Open Sans', sans-serif;
 }
 
-.state-0{
-    display: none;
+//Sound Toggle
+#sound{
+    position: absolute;
+    margin: 10px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: white;
 }
 
 .dark{
@@ -43,18 +48,18 @@ p{
 }
 
 .box-base{
-    background: url(../img/box-monster-base-white.png);
+    background: url(../img/box-monster-base.png);
     background-size: cover;
 }
 
 .box-jump{
-    background: url(../img/box-monster-jump-white.png);
+    background: url(../img/box-monster-jump.png);
     background-size: cover;
 }
 
 /*Apple*/
 .apple{
-    background: url(../img/apple-white.png);
+    background: url(../img/apple.png);
     background-size: cover;
     position: relative;
     width: 50px;
@@ -73,6 +78,10 @@ p{
     position: relative;
 }
 
+.state-0{
+    display: none;
+}
+
 .state-1{
     background: url(../img/skull-shadow-1.png);
     background-size: cover;
@@ -84,7 +93,7 @@ p{
 }
 
 .state-3{
-    background: url(../img/skull-2.png);
+    background: url(../img/skull.png);
     background-size: cover;
     z-index: 3;
 
@@ -217,7 +226,7 @@ p{
   
 /*The grid*/
   .grid {
-    background: url(../img/stone-tile-4.png);
+    background: url(../img/stone-tile.png);
     background-size: 60px;
     background-position: center;
     margin: 0 auto;
