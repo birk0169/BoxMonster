@@ -63,6 +63,10 @@ p {
   z-index: 1;
 }
 
+#skulls > div {
+  position: relative;
+}
+
 .state-1 {
   background: url(../img/skull-shadow-1.png);
   background-size: cover;
@@ -79,6 +83,46 @@ p {
   z-index: 3;
   -webkit-animation: skullShake 0.25s;
           animation: skullShake 0.25s;
+}
+
+.x-1 {
+  left: 0px;
+}
+
+.x-2 {
+  left: 60px;
+}
+
+.x-3 {
+  left: 120px;
+}
+
+.x-4 {
+  left: 180px;
+}
+
+.x-5 {
+  left: 2400px;
+}
+
+.y-1 {
+  top: 0px;
+}
+
+.y-2 {
+  top: 60px;
+}
+
+.y-3 {
+  top: 120px;
+}
+
+.y-4 {
+  top: 180px;
+}
+
+.y-5 {
+  top: 240px;
 }
 
 /*Location of the box*/

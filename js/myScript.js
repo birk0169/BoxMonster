@@ -1,5 +1,10 @@
+//VARIABLES
 //Timechecker
 var lastTime = new Date();
+
+//JumpQueue
+var jumpQueue = false;
+var nextJump = "...";
 
 //Turn count
 var turnCount = 0;
@@ -23,11 +28,14 @@ var boxMonster = document.querySelector(".box");
 // var currentLocationClass = "item-3-3";
 
 //APPLE
-////Cordinates of the apple
-var appleX = 1;
-var appleY = 1;
+function Fruit(fruitElement, xAxis, yAxis, points){
+    this.fruitElement = fruitElement;
+    this.xAxis = xAxis;
+    this.yAxis = yAxis;
+    this.points = points;
+}
 
-var apple = document.querySelector(".apple");
+var apple = new Fruit( document.querySelector(".apple"), 1, 1, 50);
 
 //SKULL
 var nextSkull = 5;
@@ -68,6 +76,26 @@ var skulls = [skullOne, skullTwo, skullThree, skullFour, skullFive, skullSix];
 //Wait
 var wait = 250;
 
+//Test Sound
+var jumpSound = new Audio("sounds/jump.mp3");
+var munchSound = new Audio("sounds/bite.mp3");
+
+
+//FUNCTIONS
+//Sounds
+function playJump(){
+    jumpSound.pause();
+    jumpSound.currentTime = 0;
+    jumpSound.play();
+}
+
+function playMunch(){
+    munchSound.pause();
+    munchSound.currentTime = 0.2;
+    munchSound.play();
+}
+
+
 //document.getElementById("reset-button").onclick = reset();
 document.onkeydown = checkKey;
 
@@ -91,6 +119,11 @@ function checkKey(e){
     else if((e.keyCode == '37') || (e.keyCode == '65')){
         //Right arrow
         moveBoxLeft();
+
+    }
+    else if(e.keyCode == '32'){
+        //Right arrow
+        //preload();
 
     }
 }
@@ -119,9 +152,16 @@ function moveBoxLeft(){
 //Movement
 function movement(direction){
     if(Math.floor((new Date() - lastTime) < wait)){
-        // console.log("test");
+        // nextJump = direction;
+        // jumpQueue = true;
+        // console.log(jumpQueue);
+
     } else if(((direction == "left" && boxLocationX != 1) || (direction == "right" && boxLocationX != 5)) || ((direction == "up" && boxLocationY != 1) || (direction == "down" && boxLocationY != 5))){
         // jumpToggle();
+        
+        //Jump Sound
+        playJump()
+        
         boxMonster.classList.add("box-jump");
         //Updates the turn
         updateTurn();
@@ -145,19 +185,26 @@ function movement(direction){
             boxMonster.classList.remove("box-animation-" + direction);
 
             monsterCheck();
+            
         }, wait);
         lastTime = new Date();
+        
+        
         
     } else{
         switchCollision("box-collision-" + direction);
         lastTime = new Date();
     }
+    // if(jumpQueue){
+    //     console.log('test');
+    //     jumpQueue = false;
+    //     movement(nextJump);
+    // }
 
 }
 
 //Resets the Game
 function reset(){
-    //console.log("test");
 
     //Log score
     if(playerScore > 0){
@@ -174,17 +221,17 @@ function reset(){
     currentSkull = 0;
     nextSkull = 5;
 
+    //Reset Apple Points
+    apple.points = 50;
+
     turnCount = 0;
     playerScore = 0;
     scoreCounter.innerHTML = playerScore;
 
     skullReset();
 
-    //document.getElementById("turn-count").innerHTML = turnCount;
+    document.getElementById("skulls").innerHTML = '';
 
-    // skullOne.classList.remove(skullLocationClass);
-    // skullLocationClass = "hidden";
-    // skullOne.classList.add(skullLocationClass);
 
     //Spawn new apple
     spawnApple();
@@ -204,6 +251,11 @@ function updateBoxLocation(){
 //Updates the turn count
 function updateTurn(){
     turnCount++;
+
+    //Increase points for apple
+    if(turnCount % 5 == 0){
+        apple.points += 5;
+    }
 
     skullGrow();
 
@@ -255,11 +307,11 @@ function monsterCheck(){
 //Spawn apple
 function spawnApple(){
     while(true){
-        appleX = Math.floor(Math.random() * 5) + 1;
-        appleY = Math.floor(Math.random() * 5) + 1;
-        if((appleX != boxLocationX && appleY != boxLocationY) && !skullsAtLocation(appleX, appleY)){
+        apple.xAxis = Math.floor(Math.random() * 5) + 1;
+        apple.yAxis = Math.floor(Math.random() * 5) + 1;
+        if((apple.xAxis != boxLocationX && apple.yAxis != boxLocationY) && !skullsAtLocation(apple.xAxis, apple.yAxis)){
             // appleLocationClass = "item-" + appleX + "-" + appleY;
-            apple.classList = "apple item-" + appleX + "-" + appleY;
+            apple.fruitElement.classList = "apple item-" + apple.xAxis + "-" + apple.yAxis;
             break;
         }
     }
@@ -268,14 +320,10 @@ function spawnApple(){
 
 //Check for apple
 function checkForApple(){
-    if(appleX == boxLocationX && appleY == boxLocationY){
-        var pointsForApple = 50;
-        if(turnCount > 30){
-            pointsForApple = 150;
-        } else if(turnCount > 15){
-            pointsForApple = 100;
-        }
-        playerScore += pointsForApple;
+    if(apple.xAxis == boxLocationX && apple.yAxis == boxLocationY){
+
+        playMunch();
+        playerScore += apple.points;
         scoreCounter.innerHTML = playerScore;
         spawnApple();
         
@@ -292,7 +340,7 @@ function skullSpawn(skull){
         
         var skullX = Math.floor(Math.random() * 5) + 1;
         var skullY = Math.floor(Math.random() * 5) + 1;
-        if(skullX!= appleX && skullY != appleY){
+        if(skullX!= apple.xAxis && skullY != apple.yAxis){
             
             var locationClass = ("item-" + skullX + "-" + skullY);
             var newClass = skull.hazardClass + " state-1 " + locationClass + " skull";
@@ -314,7 +362,7 @@ function skullToSpawn(skull){
         // breakPoint++;
         var skullX = Math.floor(Math.random() * 5) + 1;
         var skullY = Math.floor(Math.random() * 5) + 1;
-        if(skullX!= appleX && skullY != appleY){
+        if(skullX!= apple.xAxis && skullY != apple.yAxis){
             
             var locationClass = ("item-" + skullX + "-" + skullY);
             var newClass = skull.hazardClass + " state-1 " + locationClass + " skull";
@@ -331,19 +379,6 @@ function skullToSpawn(skull){
     }
     // console.log(skull);
 }
-
-//SkullGrow alt
-// function skullGrow(skull, state){
-//     if(state == 1){
-//         skullStateChange(skull, 2);
-//     } else if(state == 2){
-//         skullStateChange(skull, 3);
-//     } else if(state == 3){
-//         skullStateChange(skull, 1);
-//         skullSpawn(skull);
-
-//     }
-// }
 
 //SkullGrow OOP
 function skullGrow(){
@@ -363,23 +398,6 @@ function skullGrow(){
     });
     
 }
-
-//Change the state of an input skull
-// function skullStateChange(skull, state){
-//     if(skull == skullOne){
-//         skull.classList.remove("state-" + skullOneState);
-//         skullOneState = state;
-//         skull.classList.add("state-" + skullOneState);
-//     } else if(skull == skullTwo){
-//         skull.classList.remove("state-" + skullTwoState);
-//         skullTwoState = state;
-//         skull.classList.add("state-" + skullTwoState);
-//     } else if(skull == skullThree){
-//         skull.classList.remove("state-" + skullThreeState);
-//         skullThreeState = state;
-//         skull.classList.add("state-" + skullThreeState);
-//     }
-// }
 
 //OOP change skull state
 function skullStateChange(skull, state){
@@ -411,28 +429,6 @@ function gameOverCheck(){
         reset();
     }
 }
-
-//Test
-// function testVar(svend){
-//     skullOneX = 2;
-//     skullOneY = 2;
-//     console.log(svend);
-//     skullOne.classList.remove(svend);
-//     if(svend == skullOneLocationClass){
-//         svend = ("item-" + skullOneX + "-" + skullOneY);
-//         skullOneLocationClass = svend;
-//     } else if(svend == skullTwoLocationClass){
-//         svend = ("item-" + skullOneX + "-" + skullOneY);
-//         skullTwoLocationClass = svend;
-//     } else if(svend == skullThreeLocationClass){
-//         svend = ("item-" + skullOneX + "-" + skullOneY);
-//         skullThreeLocationClass = svend;
-//     }
-    
-//     skullOne.classList.add(svend);
-//     console.log(svend);
-
-// }
 
 //Base functions
 //Test to see if element contains specific class
