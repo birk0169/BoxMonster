@@ -81,7 +81,9 @@ var skulls = [skullOne, skullTwo, skullThree, skullFour, skullFive, skullSix, sk
 //Wait
 var wait = 250;
 
-//Test Sound
+//Sound
+var soundOn = true;
+
 var snd1 = new Audio();
 var src1 = document.createElement("source");
 src1.type = "audio/mpeg";
@@ -94,29 +96,74 @@ src2.type = "audio/mpeg";
 src2.src = "sounds/bite.mp3";
 snd2.appendChild(src2);
 
+//EVENT LISTENERS
+//Keydown
+document.onkeydown = checkKey;
+
+//Click
+document.getElementById("sound").addEventListener("click", muteToggle);
 
 //FUNCTIONS
-//Sounds
-function playJump(){
-    snd1.pause();
-    snd1.currentTime = 0;
-    snd1.play();
-}
-
-function playMunch(){
-    snd2.pause();
-    snd2.currentTime = 0.15;
-    snd2.play();
-    
-}
-
-
-//document.getElementById("reset-button").onclick = reset();
-document.onkeydown = checkKey;
 
 //Spawn the first apple
 spawnApple();
 
+//Sounds
+//Mute
+function muteToggle(){
+    let soundButton = document.getElementById("sound");
+    soundButton.classList.toggle("fa-volume-mute");
+    soundButton.classList.toggle("fa-volume-up");
+    if(soundOn){
+        soundOn = false;
+    } else{
+        soundOn = true;
+    }
+}
+
+//play sounds
+// function sound(src) {
+//     this.sound = document.createElement("audio");
+//     this.sound.src = src;
+//     this.sound.setAttribute("preload", "auto");
+//     this.sound.setAttribute("controls", "none");
+//     this.sound.style.display = "none";
+//     document.body.appendChild(this.sound);
+//     this.play = function () {
+//         this.sound.play();
+
+//     }
+//     this.stop = function () {
+//         this.sound.pause();
+//     }
+// }
+
+function playJump(){
+    if(soundOn){
+        snd1.pause();
+        snd1.currentTime = 0;
+        snd1.play();
+    }
+    
+    // snd1.pause();
+    // snd1.currentTime = 0;
+    // snd1.play();
+}
+
+function playMunch(){
+    if(soundOn){
+        snd2.pause();
+        snd2.currentTime = 0.15;
+        snd2.play();
+    }
+
+    // snd2.pause();
+    // snd2.currentTime = 0.15;
+    // snd2.play();
+    
+}
+
+//Check keys
 function checkKey(e){
     e = e || window.event;
     if((e.keyCode == '39') || (e.keyCode == '68')){
@@ -136,11 +183,11 @@ function checkKey(e){
         moveBoxLeft();
 
     }
-    else if(e.keyCode == '32'){
-        //Right arrow
-        //preload();
+    // else if(e.keyCode == '32'){
+    //     //Right arrow
+    //     //preload();
 
-    }
+    // }
 }
 
 //Right
@@ -175,7 +222,7 @@ function movement(direction){
         // jumpToggle();
         
         //Jump Sound
-        playJump()
+        playJump();
         
         boxMonster.classList.add("box-jump");
         //Updates the turn
