@@ -203,29 +203,29 @@ function checkKey(e){
     }
 }
 
-function test(){
-    let node = document.createElement("div");
-    node.classList = "state-1";
+// function test(){
+//     let node = document.createElement("div");
+//     node.classList = "state-1";
     
-    console.log('node:', node);
+//     console.log('node:', node);
 
 
-    skullContainer.appendChild(node);
+//     skullContainer.appendChild(node);
 
-    let number = 1;
+//     let number = 1;
 
-    //test
-    // let test = document.querySelector("#skull-container div:nth-child(" + number + ")");
-    let test = document.getElementById("skull-container");
-    console.log('test:', Hazard(test, 0, 0, 1));
-    //-
+//     //test
+//     // let test = document.querySelector("#skull-container div:nth-child(" + number + ")");
+//     let test = document.getElementById("skull-container");
+//     console.log('test:', Hazard(test, 0, 0, 1));
+//     //-
 
 
-    let newSkull = new Hazard(test, 0, 0, 1);
-    console.log('newSkull', newSkull);
-    skulls.push(newSkull);
-    console.log('skulls:', skulls)
-}
+//     let newSkull = new Hazard(test, 0, 0, 1);
+//     console.log('newSkull', newSkull);
+//     skulls.push(newSkull);
+//     console.log('skulls:', skulls)
+// }
 
 //Right
 function moveBoxRight(){
