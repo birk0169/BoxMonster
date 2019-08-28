@@ -1,4 +1,7 @@
 //VARIABLES
+//Game on?
+var gameOn = false;
+
 //Timechecker
 var lastTime = new Date();
 
@@ -107,6 +110,7 @@ function gameStart(){
     appleContainer.append(appleElement);
     apple = new Fruit(appleElement, 1, 1, 50);
 
+    gameOn = true;
 
     spawnApple();
 }
@@ -172,28 +176,29 @@ function playMunch(){
 //Check keys
 function checkKey(e){
     e = e || window.event;
-    if((e.keyCode == '39') || (e.keyCode == '68')){
-        //left arrow
-        moveBoxRight();
+    if(gameOn == true){
+        if((e.keyCode == '39') || (e.keyCode == '68')){
+            //left arrow
+            moveBoxRight();
+        }
+        else if((e.keyCode == '38') || (e.keyCode == '87')){
+            //Up arrow
+            moveBoxUp();
+        }
+        else if((e.keyCode == '40') || (e.keyCode == '83')){
+            //down arrow
+            moveBoxDown();
+        }
+        else if((e.keyCode == '37') || (e.keyCode == '65')){
+            //Right arrow
+            moveBoxLeft();
+        }
     }
-    else if((e.keyCode == '38') || (e.keyCode == '87')){
-        //Up arrow
-        moveBoxUp();
-    }
-    else if((e.keyCode == '40') || (e.keyCode == '83')){
-        //down arrow
-        moveBoxDown();
-    }
-    else if((e.keyCode == '37') || (e.keyCode == '65')){
-        //Right arrow
-        moveBoxLeft();
-
-    }
-    else if(e.keyCode == '32'){
-        //Right arrow
-        //preload();
+    
+    if(e.keyCode == '32'){
+        //Mute
         muteToggle();
-        test();
+        // test();
 
     }
 }
@@ -345,7 +350,6 @@ function updateBoxLocation(){
 //Updates the turn count
 function updateTurn(){
     turnCount++;
-    console.log("turn count: " + turnCount);
 
     //Increase points for apple
     if(turnCount % 5 == 0){
@@ -469,28 +473,6 @@ function skullSpawn(skull){
     }
 
 }
-
-//Not in use
-// function skullToSpawn(skull){
-//     //var breakPoint = 0;
-//     while(true){
-//         //console.log('breakPoint:', breakPoint)
-        
-//         // breakPoint++;
-//         var skullX = Math.floor(Math.random() * 5) + 1;
-//         var skullY = Math.floor(Math.random() * 5) + 1;
-//         if(skullX!= apple.xAxis && skullY != apple.yAxis){
-            
-//             var locationClass = ("item-" + skullX + "-" + skullY);
-//             var newClass = skull.hazardClass + " state-1 " + locationClass + " skull";
-//             skull.xAxis = skullX;
-//             skull.yAxis = skullY;
-
-//             skull.hazardElement.classList = newClass;
-//             break;
-//         }
-//     }
-// }
 
 
 //SkullGrow OOP
