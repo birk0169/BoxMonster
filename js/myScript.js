@@ -39,6 +39,8 @@ var apple;
 //SKULL
 var skullContainer = document.getElementById("skull-container");
 
+var maxSkulls = 20;
+
 var nextSkull = 5;
 var currentSkull = 0;
 
@@ -343,6 +345,7 @@ function updateBoxLocation(){
 //Updates the turn count
 function updateTurn(){
     turnCount++;
+    console.log("turn count: " + turnCount);
 
     //Increase points for apple
     if(turnCount % 5 == 0){
@@ -413,13 +416,13 @@ function checkForApple(){
 //Skull logic
 
 function newSkull(){
-    if((turnCount == nextSkull) && (currentSkull != 10)){
+    if((turnCount == nextSkull) && (currentSkull != maxSkulls)){
         insertSkull(currentSkull);
-        var turnTilNextSkull = 5;
-        if(turnCount > 45){
-            turnTilNextSkull = 15;
-        } else if(turnCount > 15){
+        let turnTilNextSkull = 4;
+        if(turnCount > 33){
             turnTilNextSkull = 10;
+        } else if(turnCount > 12){
+            turnTilNextSkull = 7;
         }
         nextSkull = nextSkull + turnTilNextSkull;
     
