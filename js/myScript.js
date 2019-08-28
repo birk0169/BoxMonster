@@ -18,14 +18,13 @@ var playerScore = 0;
 var scoreCounter = document.querySelector(".score");
 
 //BOX MONSTER
-////Cordinates of the box monster
-var boxLocationX = 3;
-var boxLocationY = 3;
+function Character(characterElement, xAxis, yAxis){
+    this.characterElement = characterElement;
+    this.xAxis = xAxis;
+    this.yAxis = yAxis;
+}
 
-var boxMonster = document.querySelector(".box");
-
-////Current location class of the box monster
-// var currentLocationClass = "item-3-3";
+var monster;
 
 //APPLE
 function Fruit(fruitElement, xAxis, yAxis, points){
@@ -35,48 +34,26 @@ function Fruit(fruitElement, xAxis, yAxis, points){
     this.points = points;
 }
 
-var apple = new Fruit( document.querySelector(".apple"), 1, 1, 50);
+var apple;
 
 //SKULL
+var skullContainer = document.getElementById("skull-container");
+
 var nextSkull = 5;
 var currentSkull = 0;
 
 //Objects
-function Hazard(hazardElement, xAxis, yAxis, state, hazardClass){
+function Hazard(hazardElement, xAxis, yAxis, state){
     this.hazardElement = hazardElement;
     this.xAxis = xAxis;
     this.yAxis = yAxis;
     this.state = state;
-    this.hazardClass = hazardClass;
-
-    //Object methods
-    // this.updateX = function(newX) {
-    //     xAxis = newX
-    // };
-
-    // this.updateY = function(newY){
-    //     yAxis = newY
-    // };
-
-    // this.updateState = function(newState) {
-    //     state = newState
-    // };
+    // this.hazardClass = hazardClass;
 }
 
 
-var skullOne = new Hazard(document.querySelector(".skull-one"), 0, 0, 0, "skull-one");
-var skullTwo = new Hazard(document.querySelector(".skull-two"), 0, 0, 0, "skull-two");
-var skullThree = new Hazard(document.querySelector(".skull-three"), 0, 0, 0, "skull-three");
-var skullFour = new Hazard(document.querySelector(".skull-four"), 0, 0, 0, "skull-four");
-var skullFive = new Hazard(document.querySelector(".skull-five"), 0, 0, 0, "skull-five");
-var skullSix = new Hazard(document.querySelector(".skull-six"), 0, 0, 0, "skull-six");
-var skullSeven = new Hazard(document.querySelector(".skull-seven"), 0, 0, 0, "skull-seven");
-var skullEight = new Hazard(document.querySelector(".skull-eight"), 0, 0, 0, "skull-eight");
-var skullNine = new Hazard(document.querySelector(".skull-nine"), 0, 0, 0, "skull-nine");
-var skullTen = new Hazard(document.querySelector(".skull-ten"), 0, 0, 0, "skull-ten");
-
-
-var skulls = [skullOne, skullTwo, skullThree, skullFour, skullFive, skullSix, skullSeven, skullEight, skullNine, skullTen];
+// var skulls = [skullOne, skullTwo, skullThree, skullFour, skullFive, skullSix, skullSeven, skullEight, skullNine, skullTen];
+var skulls = [];
 
 //Wait
 var wait = 250;
@@ -104,9 +81,36 @@ document.onkeydown = checkKey;
 document.getElementById("sound").addEventListener("click", muteToggle);
 
 //FUNCTIONS
+//Start the game
+gameStart();
 
-//Spawn the first apple
-spawnApple();
+//Game Start
+function gameStart(){
+    //Add player
+    let playerContainer = document.getElementById("player-container");
+
+    let playerElement = document.createElement('div');
+    playerElement.classList = "mx-3 my-3";
+
+    
+
+    playerContainer.append(playerElement);
+    monster = new Character(playerElement, 3, 3);
+
+    //Add apple
+    let appleContainer = document.getElementById("apple-container");
+
+    let appleElement = document.createElement('div');
+
+    appleContainer.append(appleElement);
+    apple = new Fruit(appleElement, 1, 1, 50);
+
+
+    spawnApple();
+}
+
+
+
 
 //Sounds
 //Mute
@@ -183,11 +187,37 @@ function checkKey(e){
         moveBoxLeft();
 
     }
-    // else if(e.keyCode == '32'){
-    //     //Right arrow
-    //     //preload();
+    else if(e.keyCode == '32'){
+        //Right arrow
+        //preload();
+        muteToggle();
+        test();
 
-    // }
+    }
+}
+
+function test(){
+    let node = document.createElement("div");
+    node.classList = "state-1";
+    
+    console.log('node:', node);
+
+
+    skullContainer.appendChild(node);
+
+    let number = 1;
+
+    //test
+    // let test = document.querySelector("#skull-container div:nth-child(" + number + ")");
+    let test = document.getElementById("skull-container");
+    console.log('test:', Hazard(test, 0, 0, 1));
+    //-
+
+
+    let newSkull = new Hazard(test, 0, 0, 1);
+    console.log('newSkull', newSkull);
+    skulls.push(newSkull);
+    console.log('skulls:', skulls)
 }
 
 //Right
@@ -218,33 +248,33 @@ function movement(direction){
         // jumpQueue = true;
         // console.log(jumpQueue);
 
-    } else if(((direction == "left" && boxLocationX != 1) || (direction == "right" && boxLocationX != 5)) || ((direction == "up" && boxLocationY != 1) || (direction == "down" && boxLocationY != 5))){
+    } else if(((direction == "left" && monster.xAxis != 1) || (direction == "right" && monster.xAxis != 5)) || ((direction == "up" && monster.yAxis != 1) || (direction == "down" && monster.yAxis != 5))){
         // jumpToggle();
         
         //Jump Sound
         playJump();
         
-        boxMonster.classList.add("box-jump");
+        monster.characterElement.classList.add("box-jump");
         //Updates the turn
         updateTurn();
 
         //Change character location
         if(direction == "left"){
-            boxLocationX = boxLocationX - 1;
+            monster.xAxis = monster.xAxis - 1;
         } else if(direction == "up"){
-            boxLocationY = boxLocationY - 1;
+            monster.yAxis = monster.yAxis - 1;
         } else if(direction == "down"){
-            boxLocationY = boxLocationY + 1;
+            monster.yAxis = monster.yAxis + 1;
         } else{
-            boxLocationX = boxLocationX + 1;
+            monster.xAxis = monster.xAxis + 1;
         }
         
-        boxMonster.classList.add("box-animation-" + direction);
+        monster.characterElement.classList.add("box-animation-" + direction);
         setTimeout(function(){
             
             updateBoxLocation();
             monsterCheck();
-            boxMonster.classList.remove("box-animation-" + direction);
+            monster.characterElement.classList.remove("box-animation-" + direction);
 
             monsterCheck();
             
@@ -274,8 +304,8 @@ function reset(){
     }
 
     //Reset player location
-    boxLocationX = 3;
-    boxLocationY = 3;
+    monster.xAxis = 3;
+    monster.yAxis = 3;
 
     updateBoxLocation();
 
@@ -292,7 +322,7 @@ function reset(){
 
     skullReset();
 
-    document.getElementById("skulls").innerHTML = '';
+    //document.getElementById("skulls").innerHTML = '';
 
 
     //Spawn new apple
@@ -304,7 +334,7 @@ function reset(){
 function updateBoxLocation(){
     // boxMonster.classList.remove(currentLocationClass);
     // currentLocationClass = "item-" + (boxLocationX) + "-" + boxLocationY;
-    boxMonster.classList = "box box-base item-" + (boxLocationX) + "-" + boxLocationY;
+    monster.characterElement.classList = "mx-" + (monster.xAxis) + " my-" + monster.yAxis;
 
     // boxMonster.classList.add(currentLocationClass);
 }
@@ -327,35 +357,19 @@ function updateTurn(){
 
 
 
-function newSkull(){
-    if((turnCount == nextSkull) && (currentSkull != 10)){
-        var turnTilNextSkull = 5;
-        if(turnCount > 45){
-            turnTilNextSkull = 15;
-        } else if(turnCount > 15){
-            turnTilNextSkull = 10;
-        }
-        nextSkull = nextSkull + turnTilNextSkull;
-    
-        skulls[currentSkull].state = 1;
-        skullSpawn(skulls[currentSkull]);
-    
-        currentSkull++;
-    }
-}
 
 //Switch Collision Class
 function switchCollision(collisionClass){
-    boxMonster.classList.add(collisionClass);
+    monster.characterElement.classList.add(collisionClass);
         setTimeout(function(){
-            boxMonster.classList.remove(collisionClass);
+            monster.characterElement.classList.remove(collisionClass);
     }, wait);
 
 }
 
 //Jump toggle
 function jumpToggle(){
-    boxMonster.classList.add("box-jump");
+    monster.characterElement.classList.add("box-jump");
 }
 
 //Check Monster
@@ -373,9 +387,9 @@ function spawnApple(){
     while(true){
         apple.xAxis = Math.floor(Math.random() * 5) + 1;
         apple.yAxis = Math.floor(Math.random() * 5) + 1;
-        if((apple.xAxis != boxLocationX && apple.yAxis != boxLocationY) && !skullsAtLocation(apple.xAxis, apple.yAxis)){
+        if((apple.xAxis != monster.xAxis && apple.yAxis != monster.yAxis) && !skullsAtLocation(apple.xAxis, apple.yAxis)){
             // appleLocationClass = "item-" + appleX + "-" + appleY;
-            apple.fruitElement.classList = "apple item-" + apple.xAxis + "-" + apple.yAxis;
+            apple.fruitElement.classList = "apple x-" + apple.xAxis + " y-" + apple.yAxis;
             break;
         }
     }
@@ -384,7 +398,7 @@ function spawnApple(){
 
 //Check for apple
 function checkForApple(){
-    if(apple.xAxis == boxLocationX && apple.yAxis == boxLocationY){
+    if(apple.xAxis == monster.xAxis && apple.yAxis == monster.yAxis){
 
         playMunch();
         playerScore += apple.points;
@@ -397,6 +411,41 @@ function checkForApple(){
 //Sound for apple
 
 //Skull logic
+
+function newSkull(){
+    if((turnCount == nextSkull) && (currentSkull != 10)){
+        insertSkull(currentSkull);
+        var turnTilNextSkull = 5;
+        if(turnCount > 45){
+            turnTilNextSkull = 15;
+        } else if(turnCount > 15){
+            turnTilNextSkull = 10;
+        }
+        nextSkull = nextSkull + turnTilNextSkull;
+    
+        // skulls[currentSkull].state = 1; 
+        // console.log("test: " + skulls[0]);
+        skullSpawn(skulls[currentSkull]);
+    
+        currentSkull++;
+    }
+}
+
+function insertSkull(number){
+    let node = document.createElement("div");
+    node.classList = "state-1";
+    
+
+
+    skullContainer.appendChild(node);
+
+    // let number = 1;
+
+    let newSkull = new Hazard(document.querySelector("#skull-container div:nth-child(" + (number + 1) + ")"), 0, 0, 1);
+    skulls.push(newSkull);
+}
+
+//Spawn skull at random location
 function skullSpawn(skull){
     //skullToSpawn(skull);
 
@@ -406,8 +455,8 @@ function skullSpawn(skull){
         var skullY = Math.floor(Math.random() * 5) + 1;
         if(skullX!= apple.xAxis && skullY != apple.yAxis){
             
-            var locationClass = ("item-" + skullX + "-" + skullY);
-            var newClass = skull.hazardClass + " state-1 " + locationClass + " skull";
+            var locationClass = ("x-" + skullX + " y-" + skullY);
+            var newClass = "state-1 " + locationClass;
             skull.xAxis = skullX;
             skull.yAxis = skullY;
 
@@ -418,48 +467,50 @@ function skullSpawn(skull){
 
 }
 
-function skullToSpawn(skull){
-    //var breakPoint = 0;
-    while(true){
-        //console.log('breakPoint:', breakPoint)
+//Not in use
+// function skullToSpawn(skull){
+//     //var breakPoint = 0;
+//     while(true){
+//         //console.log('breakPoint:', breakPoint)
         
-        // breakPoint++;
-        var skullX = Math.floor(Math.random() * 5) + 1;
-        var skullY = Math.floor(Math.random() * 5) + 1;
-        if(skullX!= apple.xAxis && skullY != apple.yAxis){
+//         // breakPoint++;
+//         var skullX = Math.floor(Math.random() * 5) + 1;
+//         var skullY = Math.floor(Math.random() * 5) + 1;
+//         if(skullX!= apple.xAxis && skullY != apple.yAxis){
             
-            var locationClass = ("item-" + skullX + "-" + skullY);
-            var newClass = skull.hazardClass + " state-1 " + locationClass + " skull";
-            skull.xAxis = skullX;
-            skull.yAxis = skullY;
+//             var locationClass = ("item-" + skullX + "-" + skullY);
+//             var newClass = skull.hazardClass + " state-1 " + locationClass + " skull";
+//             skull.xAxis = skullX;
+//             skull.yAxis = skullY;
 
-            skull.hazardElement.classList = newClass;
-            break;
-        }
-        // if(breakPoint > 6){
-        //     console.log("emergancy break point");
-        //     break;
-        // }
-    }
-    // console.log(skull);
-}
+//             skull.hazardElement.classList = newClass;
+//             break;
+//         }
+//     }
+// }
+
 
 //SkullGrow OOP
 function skullGrow(){
-    skulls.forEach(skull =>{
-        if(skull.state == 1){
-            skullStateChange(skull, 2);
-        } else if(skull.state == 2){
-            skullStateChange(skull, 3);
-        } else if(skull.state == 3){
-            skullStateChange(skull, 1);
-            try{
-                skullSpawn(skull);
-            } catch(err){
-                console.log(err);
+
+    if(skulls.length != 0){
+        
+        skulls.forEach(skull =>{
+            if(skull.state == 1){
+                skullStateChange(skull, 2);
+            } else if(skull.state == 2){
+                skullStateChange(skull, 3);
+            } else if(skull.state == 3){
+                skullStateChange(skull, 1);
+                try{
+                    skullSpawn(skull);
+                } catch(err){
+                    console.log(err);
+                }
             }
-        }
-    });
+        });
+    }
+
     
 }
 
@@ -468,24 +519,29 @@ function skullStateChange(skull, state){
     // skull.classList.remove("state-" + skull.state);
     skull.state = state;
     // skull.classList.add("state-" + skull.state);
-    skull.hazardElement.classList = skull.hazardClass + " item-" + skull.xAxis + "-" + skull.yAxis + " state-" + skull.state;
+    skull.hazardElement.classList = "x-" + skull.xAxis + " y-" + skull.yAxis + " state-" + skull.state;
 }
 
 //Check for skulls
 function skullsAtLocation(xCordinate, yCordinate){
-    var skullAtLocation = false;
-    skulls.forEach(skull =>{
-        if((skull.xAxis == xCordinate) && (skull.yAxis == yCordinate)){
-            skullAtLocation = true;
-        }
-    });
+    let skullAtLocation = false;
+    if(skulls.length != 0){
+
+        skulls.forEach(skull =>{
+            if((skull.xAxis == xCordinate) && (skull.yAxis == yCordinate)){
+                skullAtLocation = true;
+            }
+        });
+
+    }
+    
     return skullAtLocation;
 }
 
 function gameOverCheck(){
     var gameOver = false;
     skulls.forEach(skull =>{
-        if((boxLocationX == skull.xAxis && boxLocationY == skull.yAxis) && skull.state == 3){
+        if((monster.xAxis == skull.xAxis && monster.yAxis == skull.yAxis) && skull.state == 3){
             gameOver = true;
         }
     });
@@ -501,14 +557,18 @@ function hasClass(ele,cls) {
 }
 
 function skullReset(){
-    
-    skulls.forEach(skull => {
-        skull.xAxis = 0;
-        skull.yAxis = 0;
+    //Empty skull container
+    skullContainer.innerHTML = "";
+    //Reset skulls class
+    skulls = [];
 
-        skull.state = 0;
+    // skulls.forEach(skull => {
+    //     skull.xAxis = 0;
+    //     skull.yAxis = 0;
 
-        skull.hazardElement.classList = skull.state + " " + skull.hazardClass + " skull";
-    });
+    //     skull.state = 0;
+
+    //     skull.hazardElement.classList = skull.state + " " + skull.hazardClass + " skull";
+    // });
 }
 
