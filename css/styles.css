@@ -35,7 +35,7 @@ p {
 
 /*The Box Monster*/
 #player-container > div {
-  background: url(../img/box-monster-base.png);
+  background: url(../img/character/monster-down.png);
   background-size: cover;
   position: absolute;
   width: 50px;
@@ -43,9 +43,41 @@ p {
   z-index: 3;
 }
 
-#player-container .box-jump {
-  background: url(../img/box-monster-jump.png);
-  background-size: cover;
+#player-container {
+  /*Facing*/
+  /*Jumping*/
+}
+
+#player-container .face-left {
+  background: url(../img/character/monster-left.png);
+}
+
+#player-container .face-up {
+  background: url(../img/character/monster-up.png);
+}
+
+#player-container .face-down {
+  background: url(../img/character/monster-down.png);
+}
+
+#player-container .face-right {
+  background: url(../img/character/monster-right.png);
+}
+
+#player-container .jump-left {
+  background: url(../img/character-jump/monster-jump-left.png);
+}
+
+#player-container .jump-up {
+  background: url(../img/character-jump/monster-jump-up.png);
+}
+
+#player-container .jump-down {
+  background: url(../img/character-jump/monster-jump-down.png);
+}
+
+#player-container .jump-right {
+  background: url(../img/character-jump/monster-jump-right.png);
 }
 
 /*Apple*/

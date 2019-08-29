@@ -16,15 +16,19 @@ var turnCount = 0;
 var maxX = 5;
 var maxY = 5;
 
+var minX = 1;
+var minY = 1;
+
 //Player Score
 var playerScore = 0;
 var scoreCounter = document.querySelector(".score");
 
 //BOX MONSTER
-function Character(characterElement, xAxis, yAxis){
+function Character(characterElement, xAxis, yAxis, faceDirection){
     this.characterElement = characterElement;
     this.xAxis = xAxis;
     this.yAxis = yAxis;
+    this.faceDirection = faceDirection;
 }
 
 var monster;
@@ -66,17 +70,26 @@ var wait = 250;
 //Sound
 var soundOn = true;
 
+//Jump sound
 var snd1 = new Audio();
 var src1 = document.createElement("source");
 src1.type = "audio/mpeg";
 src1.src = "sounds/jump.mp3";
 snd1.appendChild(src1);
 
+//Get Point sound
 var snd2 = new Audio();
 var src2 = document.createElement("source");
 src2.type = "audio/mpeg";
-src2.src = "sounds/bite.mp3";
+src2.src = "sounds/retro_collect_pickup_coin_03.wav";
 snd2.appendChild(src2);
+
+//Game over sound
+var snd3 = new Audio();
+var src3 = document.createElement("source");
+src3.type = "audio/mpeg";
+src3.src = "sounds/retro_impact_hit_13.wav";
+snd3.appendChild(src3);
 
 //EVENT LISTENERS
 //Keydown
@@ -95,12 +108,12 @@ function gameStart(){
     let playerContainer = document.getElementById("player-container");
 
     let playerElement = document.createElement('div');
-    playerElement.classList = "mx-3 my-3";
+    playerElement.classList = "face-down mx-3 my-3";
 
     
 
     playerContainer.append(playerElement);
-    monster = new Character(playerElement, 3, 3);
+    monster = new Character(playerElement, 3, 3, "down");
 
     //Add apple
     let appleContainer = document.getElementById("apple-container");
@@ -163,7 +176,7 @@ function playJump(){
 function playMunch(){
     if(soundOn){
         snd2.pause();
-        snd2.currentTime = 0.15;
+        snd2.currentTime = 0;
         snd2.play();
     }
 
@@ -171,6 +184,14 @@ function playMunch(){
     // snd2.currentTime = 0.15;
     // snd2.play();
     
+}
+
+function gameOverSound(){
+    if(soundOn){
+        snd3.pause();
+        snd3.currentTime = 0;
+        snd3.play();
+    }
 }
 
 //Check keys
@@ -255,13 +276,14 @@ function movement(direction){
         // jumpQueue = true;
         // console.log(jumpQueue);
 
-    } else if(((direction == "left" && monster.xAxis != 1) || (direction == "right" && monster.xAxis != 5)) || ((direction == "up" && monster.yAxis != 1) || (direction == "down" && monster.yAxis != 5))){
-        // jumpToggle();
+    } else if(((direction == "left" && monster.xAxis != minX) || (direction == "right" && monster.xAxis != maxX)) || ((direction == "up" && monster.yAxis != minY) || (direction == "down" && monster.yAxis != maxY))){
         
         //Jump Sound
         playJump();
         
-        monster.characterElement.classList.add("box-jump");
+        //Add alt character class to change character appearance
+        monster.characterElement.classList.add("jump-" + direction);
+
         //Updates the turn
         updateTurn();
 
@@ -279,14 +301,17 @@ function movement(direction){
         monster.characterElement.classList.add("box-animation-" + direction);
         setTimeout(function(){
             
-            updateBoxLocation();
-            monsterCheck();
-            monster.characterElement.classList.remove("box-animation-" + direction);
+            //Update character
+            updateBoxLocation(direction);
 
+
+            //Check for Hazards and Points
             monsterCheck();
             
         }, wait);
         lastTime = new Date();
+
+        monster.faceDirection = direction;
         
         
         
@@ -338,10 +363,10 @@ function reset(){
 }
 
 //Update the boxes current location after it moves
-function updateBoxLocation(){
+function updateBoxLocation(facing = "down"){
     // boxMonster.classList.remove(currentLocationClass);
     // currentLocationClass = "item-" + (boxLocationX) + "-" + boxLocationY;
-    monster.characterElement.classList = "mx-" + (monster.xAxis) + " my-" + monster.yAxis;
+    monster.characterElement.classList = "face-"+ facing +" mx-" + (monster.xAxis) + " my-" + monster.yAxis;
 
     // boxMonster.classList.add(currentLocationClass);
 }
@@ -531,6 +556,8 @@ function gameOverCheck(){
         }
     });
     if(gameOver){
+        //Game Over Sound
+        gameOverSound();
         reset();
     }
 }
